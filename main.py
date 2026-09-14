@@ -61,14 +61,6 @@ html, body, [class*="css"] {
     max-width: 520px;
 }
 
-.slider-value {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.8rem;
-    color: #1F2A24;
-    margin-top: -0.6rem;
-    margin-bottom: 0.9rem;
-}
-
 .field-group-label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.72rem;
@@ -92,6 +84,19 @@ div[data-testid="stSlider"] > div > div > div > div {
     background-color: #1F2A24 !important;
 }
 
+/* Restyle the built-in value tooltip: no dark box, plain text, always visible */
+div[data-baseweb="slider"] div[role="slider"] div {
+    background-color: transparent !important;
+    color: #1F2A24 !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 0.78rem !important;
+    box-shadow: none !important;
+    border: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    top: -1.6rem !important;
+}
+
 div[data-testid="stTickBar"] {
     display: none;
 }
@@ -100,6 +105,10 @@ div[data-testid="stSelectbox"] > div > div {
     background-color: #F7F5F0 !important;
     border: 1px solid #C9C2B4 !important;
     border-radius: 3px !important;
+    color: #1F2A24 !important;
+}
+
+div[data-testid="stSelectbox"] > div > div * {
     color: #1F2A24 !important;
 }
 
@@ -116,8 +125,9 @@ div[data-testid="stFormSubmitButton"] > button {
     font-family: 'Inter', sans-serif;
     font-weight: 500;
     font-size: 0.9rem;
-    padding: 0.55rem 1.6rem;
-    border-radius: 3px;
+    padding: 0.85rem 2.4rem;
+    line-height: 1;
+    border-radius: 4px;
     border: none;
     margin-top: 0.8rem;
     transition: background-color 0.15s ease;
@@ -216,19 +226,16 @@ with st.form("prediction_form"):
                              min_value=float(rentang['bedrooms']['min']),
                              max_value=float(rentang['bedrooms']['max']),
                              value=float(rentang['bedrooms']['min']))
-        st.markdown(f'<div class="slider-value">Selected: {bedrooms:g}</div>', unsafe_allow_html=True)
 
         bathrooms = st.slider("Bathrooms",
                               min_value=float(rentang['bathrooms']['min']),
                               max_value=float(rentang['bathrooms']['max']),
                               value=float(rentang['bathrooms']['min']))
-        st.markdown(f'<div class="slider-value">Selected: {bathrooms:g}</div>', unsafe_allow_html=True)
 
         floors = st.slider("Floors",
                            min_value=float(rentang['floors']['min']),
                            max_value=float(rentang['floors']['max']),
                            value=float(rentang['floors']['min']))
-        st.markdown(f'<div class="slider-value">Selected: {floors:g}</div>', unsafe_allow_html=True)
 
     with col2:
         st.markdown('<div class="field-group-label">Space &amp; Location</div>', unsafe_allow_html=True)
@@ -237,13 +244,11 @@ with st.form("prediction_form"):
                                 min_value=float(rentang['sqft_living']['min']),
                                 max_value=float(rentang['sqft_living']['max']),
                                 value=float(rentang['sqft_living']['min']))
-        st.markdown(f'<div class="slider-value">Selected: {sqft_living:,.0f} sqft</div>', unsafe_allow_html=True)
 
         sqft_above = st.slider("Above-ground area (sqft)",
                                min_value=float(rentang['sqft_above']['min']),
                                max_value=float(rentang['sqft_above']['max']),
                                value=float(rentang['sqft_above']['min']))
-        st.markdown(f'<div class="slider-value">Selected: {sqft_above:,.0f} sqft</div>', unsafe_allow_html=True)
 
         city = st.selectbox("City", options=list(encoders['city'].classes_))
         statezip = st.selectbox("State ZIP code", options=list(encoders['statezip'].classes_))
@@ -276,6 +281,7 @@ if submit_button:
     price_final = target_scaler.inverse_transform(pred_scaled.reshape(-1, 1))[0][0]
 
     # --- Result Display ---
+    st.snow()
     st.markdown(f"""
     <div class="result-block">
         <div class="result-label">Estimated market price</div>
