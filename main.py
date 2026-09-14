@@ -118,8 +118,7 @@ div[data-testid="stTickBar"] {
 
 div[data-testid="stTickBarMin"],
 div[data-testid="stTickBarMax"] {
-    background-color: transparent !important;
-    color: #D6D9D8 !important;
+    color: #14181A !important;
     font-family: 'IBM Plex Mono', monospace !important;
     font-weight: 600 !important;
 }
