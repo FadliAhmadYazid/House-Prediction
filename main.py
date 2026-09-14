@@ -123,6 +123,13 @@ div[data-testid="stTickBarMax"] {
     font-weight: 600 !important;
 }
 
+/* Fallback: target the min/max label container by structure in case testid differs by version */
+div[data-baseweb="slider"] > div:last-child span,
+div[data-baseweb="slider"] > div:last-child div {
+    color: #14181A !important;
+    font-weight: 600 !important;
+}
+
 div[data-testid="stSelectbox"] > div > div {
     background-color: #1D2224 !important;
     border: 1px solid #33393C !important;
