@@ -61,6 +61,14 @@ html, body, [class*="css"] {
     max-width: 520px;
 }
 
+.slider-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: #1F2A24;
+    margin-top: -0.6rem;
+    margin-bottom: 0.9rem;
+}
+
 .field-group-label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.72rem;
@@ -86,6 +94,19 @@ div[data-testid="stSlider"] > div > div > div > div {
 
 div[data-testid="stTickBar"] {
     display: none;
+}
+
+/* Make the current-value bubble on sliders always visible, not just on hover/drag */
+div[data-testid="stSlider"] div[role="slider"] > div {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+}
+
+div[data-testid="stSlider"] div[data-baseweb="tooltip"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
 }
 
 div[data-testid="stSelectbox"] > div > div {
@@ -202,16 +223,19 @@ with st.form("prediction_form"):
                              min_value=float(rentang['bedrooms']['min']),
                              max_value=float(rentang['bedrooms']['max']),
                              value=float(rentang['bedrooms']['min']))
+        st.markdown(f'<div class="slider-value">Selected: {bedrooms:g}</div>', unsafe_allow_html=True)
 
         bathrooms = st.slider("Bathrooms",
                               min_value=float(rentang['bathrooms']['min']),
                               max_value=float(rentang['bathrooms']['max']),
                               value=float(rentang['bathrooms']['min']))
+        st.markdown(f'<div class="slider-value">Selected: {bathrooms:g}</div>', unsafe_allow_html=True)
 
         floors = st.slider("Floors",
                            min_value=float(rentang['floors']['min']),
                            max_value=float(rentang['floors']['max']),
                            value=float(rentang['floors']['min']))
+        st.markdown(f'<div class="slider-value">Selected: {floors:g}</div>', unsafe_allow_html=True)
 
     with col2:
         st.markdown('<div class="field-group-label">Space &amp; Location</div>', unsafe_allow_html=True)
@@ -220,11 +244,13 @@ with st.form("prediction_form"):
                                 min_value=float(rentang['sqft_living']['min']),
                                 max_value=float(rentang['sqft_living']['max']),
                                 value=float(rentang['sqft_living']['min']))
+        st.markdown(f'<div class="slider-value">Selected: {sqft_living:,.0f} sqft</div>', unsafe_allow_html=True)
 
         sqft_above = st.slider("Above-ground area (sqft)",
                                min_value=float(rentang['sqft_above']['min']),
                                max_value=float(rentang['sqft_above']['max']),
                                value=float(rentang['sqft_above']['min']))
+        st.markdown(f'<div class="slider-value">Selected: {sqft_above:,.0f} sqft</div>', unsafe_allow_html=True)
 
         city = st.selectbox("City", options=list(encoders['city'].classes_))
         statezip = st.selectbox("State ZIP code", options=list(encoders['statezip'].classes_))
