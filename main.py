@@ -118,9 +118,15 @@ div[data-testid="stTickBar"] {
     display: none;
 }
 
-/* Min/max labels at the ends of the slider track */
+/* Min/max labels at the ends of the slider track: no background, white text */
+div[data-testid="stSliderTickBar"],
+div[data-testid="stSliderTickBar"] > div {
+    background-color: transparent !important;
+}
+
 div[data-testid="stSliderTickBar"] p {
-    color: #14181A !important;
+    background-color: transparent !important;
+    color: #EDEEEC !important;
     font-family: 'IBM Plex Mono', monospace !important;
     font-weight: 600 !important;
 }
