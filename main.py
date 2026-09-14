@@ -11,7 +11,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- Custom CSS ---
+# --- Custom CSS (dark theme) ---
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap');
@@ -21,7 +21,7 @@ html, body, [class*="css"] {
 }
 
 .stApp {
-    background-color: #EDEAE3;
+    background-color: #14181A;
 }
 
 #MainMenu, footer, header {visibility: hidden;}
@@ -32,7 +32,7 @@ html, body, [class*="css"] {
 }
 
 .masthead {
-    border-bottom: 2px solid #1F2A24;
+    border-bottom: 2px solid #3A4144;
     padding-bottom: 1rem;
     margin-bottom: 2.2rem;
 }
@@ -40,7 +40,7 @@ html, body, [class*="css"] {
 .masthead-label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.72rem;
-    color: #6B6459;
+    color: #8A9296;
     letter-spacing: 0.04em;
     margin-bottom: 0.3rem;
 }
@@ -49,14 +49,14 @@ html, body, [class*="css"] {
     font-family: 'Source Serif 4', serif;
     font-weight: 600;
     font-size: 2.1rem;
-    color: #1F2A24;
+    color: #EDEEEC;
     line-height: 1.15;
 }
 
 .masthead-sub {
     font-family: 'Inter', sans-serif;
     font-size: 0.92rem;
-    color: #5A5348;
+    color: #A7ADB0;
     margin-top: 0.4rem;
     max-width: 520px;
 }
@@ -64,10 +64,10 @@ html, body, [class*="css"] {
 .field-group-label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.72rem;
-    color: #6B6459;
+    color: #8A9296;
     letter-spacing: 0.03em;
     text-transform: uppercase;
-    border-bottom: 1px solid #C9C2B4;
+    border-bottom: 1px solid #33393C;
     padding-bottom: 0.5rem;
     margin-bottom: 1.1rem;
     margin-top: 0.3rem;
@@ -75,47 +75,39 @@ html, body, [class*="css"] {
 
 div[data-testid="stSlider"] label p,
 div[data-testid="stSelectbox"] label p {
-    color: #3A362E !important;
+    color: #D6D9D8 !important;
     font-weight: 500 !important;
     font-size: 0.88rem !important;
 }
 
+/* Slider track (filled portion) */
 div[data-testid="stSlider"] > div > div > div > div {
-    background-color: #1F2A24 !important;
+    background-color: #E7A852 !important;
 }
 
-/* The round drag handle: solid accent color */
+/* Slider track (background rail) */
+div[data-baseweb="slider"] > div > div {
+    background-color: #2B3134 !important;
+}
+
+/* Round drag handle */
 div[data-baseweb="slider"] div[role="slider"] {
-    background-color: #C1443A !important;
+    background-color: #E7A852 !important;
     border: none !important;
 }
 
-/* Everything inside the handle (the value tooltip) should have no dark box, plain dark text */
-div[data-baseweb="slider"] div[role="slider"] * {
-    background: transparent !important;
-    background-color: transparent !important;
-    background-image: none !important;
-    color: #1F2A24 !important;
-    font-family: 'IBM Plex Mono', monospace !important;
-    font-size: 0.78rem !important;
-    box-shadow: none !important;
-    border: none !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
+/* Value tooltip shown above the handle: dark theme box, readable text */
+div[data-baseweb="slider"] div[role="slider"] div,
 div[data-testid="stThumbValue"],
 div[data-testid="stSliderThumbValue"] {
-    background: transparent !important;
-    background-color: transparent !important;
-    color: #1F2A24 !important;
+    background-color: #22282B !important;
+    color: #EDEEEC !important;
     font-family: 'IBM Plex Mono', monospace !important;
     font-size: 0.78rem !important;
-    box-shadow: none !important;
-    border: none !important;
+    border: 1px solid #3A4144 !important;
+    border-radius: 4px !important;
     opacity: 1 !important;
     visibility: visible !important;
-    top: -1.6rem !important;
 }
 
 div[data-testid="stTickBar"] {
@@ -123,14 +115,23 @@ div[data-testid="stTickBar"] {
 }
 
 div[data-testid="stSelectbox"] > div > div {
-    background-color: #F7F5F0 !important;
-    border: 1px solid #C9C2B4 !important;
+    background-color: #1D2224 !important;
+    border: 1px solid #33393C !important;
     border-radius: 3px !important;
-    color: #1F2A24 !important;
+    color: #EDEEEC !important;
 }
 
 div[data-testid="stSelectbox"] > div > div * {
-    color: #1F2A24 !important;
+    color: #EDEEEC !important;
+}
+
+div[data-baseweb="popover"] li {
+    background-color: #1D2224 !important;
+    color: #EDEEEC !important;
+}
+
+div[data-baseweb="popover"] li:hover {
+    background-color: #2B3134 !important;
 }
 
 div[data-testid="stFormSubmitButton"] {
@@ -141,10 +142,10 @@ div[data-testid="stFormSubmitButton"] {
 
 div[data-testid="stFormSubmitButton"] > button {
     width: auto;
-    background-color: #1F2A24;
-    color: #EDEAE3;
+    background-color: #E7A852;
+    color: #14181A;
     font-family: 'Inter', sans-serif;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 0.9rem;
     padding: 0.85rem 2.4rem;
     line-height: 1;
@@ -155,21 +156,21 @@ div[data-testid="stFormSubmitButton"] > button {
 }
 
 div[data-testid="stFormSubmitButton"] > button:hover {
-    background-color: #34433A;
-    color: #EDEAE3;
+    background-color: #F2BC72;
+    color: #14181A;
     border: none;
 }
 
 .result-block {
     margin-top: 2.2rem;
     padding-top: 1.6rem;
-    border-top: 2px solid #1F2A24;
+    border-top: 2px solid #3A4144;
 }
 
 .result-label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.72rem;
-    color: #6B6459;
+    color: #8A9296;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     margin-bottom: 0.5rem;
@@ -179,7 +180,7 @@ div[data-testid="stFormSubmitButton"] > button:hover {
     font-family: 'Source Serif 4', serif;
     font-weight: 600;
     font-size: 3.2rem;
-    color: #1F2A24;
+    color: #EDEEEC;
     line-height: 1;
 }
 
@@ -192,12 +193,12 @@ div[data-testid="stFormSubmitButton"] > button:hover {
 
 .result-table td {
     padding: 0.5rem 0;
-    border-bottom: 1px solid #DAD5C9;
-    color: #3A362E;
+    border-bottom: 1px solid #262C2E;
+    color: #D6D9D8;
 }
 
 .result-table td:first-child {
-    color: #6B6459;
+    color: #8A9296;
     width: 45%;
 }
 
