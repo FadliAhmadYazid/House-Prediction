@@ -254,85 +254,90 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# --- Form ---
-with st.form("prediction_form"):
-    col1, col2 = st.columns(2, gap="large")
+# --- Main layout: form on the left, result on the right ---
+main_col, result_col = st.columns([1.4, 1], gap="large")
 
-    with col1:
-        st.markdown('<div class="field-group-label">Physical Features</div>', unsafe_allow_html=True)
+with main_col:
+    # --- Form ---
+    with st.form("prediction_form"):
+        col1, col2 = st.columns(2, gap="large")
 
-        bedrooms = st.slider("Bedrooms",
-                             min_value=float(rentang['bedrooms']['min']),
-                             max_value=float(rentang['bedrooms']['max']),
-                             value=float(rentang['bedrooms']['min']))
+        with col1:
+            st.markdown('<div class="field-group-label">Physical Features</div>', unsafe_allow_html=True)
 
-        bathrooms = st.slider("Bathrooms",
-                              min_value=float(rentang['bathrooms']['min']),
-                              max_value=float(rentang['bathrooms']['max']),
-                              value=float(rentang['bathrooms']['min']))
+            bedrooms = st.slider("Bedrooms",
+                                 min_value=float(rentang['bedrooms']['min']),
+                                 max_value=float(rentang['bedrooms']['max']),
+                                 value=float(rentang['bedrooms']['min']))
 
-        floors = st.slider("Floors",
-                           min_value=float(rentang['floors']['min']),
-                           max_value=float(rentang['floors']['max']),
-                           value=float(rentang['floors']['min']))
+            bathrooms = st.slider("Bathrooms",
+                                  min_value=float(rentang['bathrooms']['min']),
+                                  max_value=float(rentang['bathrooms']['max']),
+                                  value=float(rentang['bathrooms']['min']))
 
-    with col2:
-        st.markdown('<div class="field-group-label">Space &amp; Location</div>', unsafe_allow_html=True)
+            floors = st.slider("Floors",
+                               min_value=float(rentang['floors']['min']),
+                               max_value=float(rentang['floors']['max']),
+                               value=float(rentang['floors']['min']))
 
-        sqft_living = st.slider("Living area (sqft)",
-                                min_value=float(rentang['sqft_living']['min']),
-                                max_value=float(rentang['sqft_living']['max']),
-                                value=float(rentang['sqft_living']['min']))
+        with col2:
+            st.markdown('<div class="field-group-label">Space &amp; Location</div>', unsafe_allow_html=True)
 
-        sqft_above = st.slider("Above-ground area (sqft)",
-                               min_value=float(rentang['sqft_above']['min']),
-                               max_value=float(rentang['sqft_above']['max']),
-                               value=float(rentang['sqft_above']['min']))
+            sqft_living = st.slider("Living area (sqft)",
+                                    min_value=float(rentang['sqft_living']['min']),
+                                    max_value=float(rentang['sqft_living']['max']),
+                                    value=float(rentang['sqft_living']['min']))
 
-        city = st.selectbox("City", options=list(encoders['city'].classes_))
-        statezip = st.selectbox("State ZIP code", options=list(encoders['statezip'].classes_))
+            sqft_above = st.slider("Above-ground area (sqft)",
+                                   min_value=float(rentang['sqft_above']['min']),
+                                   max_value=float(rentang['sqft_above']['max']),
+                                   value=float(rentang['sqft_above']['min']))
 
-    submit_button = st.form_submit_button("Estimate price")
+            city = st.selectbox("City", options=list(encoders['city'].classes_))
+            statezip = st.selectbox("State ZIP code", options=list(encoders['statezip'].classes_))
 
-if submit_button:
-    # 1. Pre-processing: Categorical Encoding
-    enc_city = encoders['city'].transform([city])[0]
-    enc_zip = encoders['statezip'].transform([statezip])[0]
+        submit_button = st.form_submit_button("Estimate price")
 
-    # 2. Construct DataFrame with exact training order
-    input_data = pd.DataFrame({
-        'bedrooms': [bedrooms],
-        'bathrooms': [bathrooms],
-        'sqft_living': [sqft_living],
-        'floors': [floors],
-        'sqft_above': [sqft_above],
-        'city': [enc_city],
-        'statezip': [enc_zip]
-    })
+with result_col:
+    if submit_button:
+        # 1. Pre-processing: Categorical Encoding
+        enc_city = encoders['city'].transform([city])[0]
+        enc_zip = encoders['statezip'].transform([statezip])[0]
 
-    # 3. Scaling features
-    input_scaled = scaler_fitur.transform(input_data)
+        # 2. Construct DataFrame with exact training order
+        input_data = pd.DataFrame({
+            'bedrooms': [bedrooms],
+            'bathrooms': [bathrooms],
+            'sqft_living': [sqft_living],
+            'floors': [floors],
+            'sqft_above': [sqft_above],
+            'city': [enc_city],
+            'statezip': [enc_zip]
+        })
 
-    # 4. Prediction
-    pred_scaled = model.predict(input_scaled)
+        # 3. Scaling features
+        input_scaled = scaler_fitur.transform(input_data)
 
-    # 5. Inverse Transform target
-    price_final = target_scaler.inverse_transform(pred_scaled.reshape(-1, 1))[0][0]
+        # 4. Prediction
+        pred_scaled = model.predict(input_scaled)
 
-    # --- Result Display ---
-    st.snow()
-    st.markdown(f"""
-    <div class="result-block">
-        <div class="result-label">Estimated market price</div>
-        <div class="result-price">${price_final:,.0f}</div>
-        <table class="result-table">
-            <tr><td>Bedrooms</td><td>{bedrooms:g}</td></tr>
-            <tr><td>Bathrooms</td><td>{bathrooms:g}</td></tr>
-            <tr><td>Floors</td><td>{floors:g}</td></tr>
-            <tr><td>Living area</td><td>{sqft_living:,.0f} sqft</td></tr>
-            <tr><td>Above-ground area</td><td>{sqft_above:,.0f} sqft</td></tr>
-            <tr><td>City</td><td>{city}</td></tr>
-            <tr><td>State ZIP</td><td>{statezip}</td></tr>
-        </table>
-    </div>
-    """, unsafe_allow_html=True)
+        # 5. Inverse Transform target
+        price_final = target_scaler.inverse_transform(pred_scaled.reshape(-1, 1))[0][0]
+
+        # --- Result Display ---
+        st.snow()
+        st.markdown(f"""
+        <div class="result-block">
+            <div class="result-label">Estimated market price</div>
+            <div class="result-price">${price_final:,.0f}</div>
+            <table class="result-table">
+                <tr><td>Bedrooms</td><td>{bedrooms:g}</td></tr>
+                <tr><td>Bathrooms</td><td>{bathrooms:g}</td></tr>
+                <tr><td>Floors</td><td>{floors:g}</td></tr>
+                <tr><td>Living area</td><td>{sqft_living:,.0f} sqft</td></tr>
+                <tr><td>Above-ground area</td><td>{sqft_above:,.0f} sqft</td></tr>
+                <tr><td>City</td><td>{city}</td></tr>
+                <tr><td>State ZIP</td><td>{statezip}</td></tr>
+            </table>
+        </div>
+        """, unsafe_allow_html=True)
