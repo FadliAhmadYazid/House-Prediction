@@ -6,219 +6,159 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 # --- Page Configuration ---
 st.set_page_config(
-    page_title="Smart House Price Predictor",
-    page_icon="🏠",
+    page_title="House Price Estimator",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# --- Custom CSS: Fonts, Colors, Cards, Animations ---
+# --- Custom CSS ---
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap');
 
 html, body, [class*="css"] {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, sans-serif;
 }
 
-/* App background */
 .stApp {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-    background-attachment: fixed;
+    background-color: #EDEAE3;
 }
 
-/* Hide default streamlit chrome */
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
+#MainMenu, footer, header {visibility: hidden;}
 
-/* Hero header */
-.hero-container {
-    text-align: center;
-    padding: 2.5rem 1rem 1.5rem 1rem;
-    animation: fadeInDown 0.8s ease-out;
+.block-container {
+    max-width: 900px;
+    padding-top: 2.5rem;
 }
 
-.hero-title {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 800;
-    font-size: 2.8rem;
-    background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: shimmer 4s linear infinite;
+.masthead {
+    border-bottom: 2px solid #1F2A24;
+    padding-bottom: 1rem;
+    margin-bottom: 2.2rem;
+}
+
+.masthead-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: #6B6459;
+    letter-spacing: 0.04em;
     margin-bottom: 0.3rem;
 }
 
-.hero-subtitle {
-    color: #94a3b8;
-    font-size: 1.05rem;
-    font-weight: 400;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-@keyframes shimmer {
-    to { background-position: 200% center; }
-}
-
-@keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Glass-card style sections */
-.glass-card {
-    background: rgba(30, 41, 59, 0.6);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(148, 163, 184, 0.15);
-    border-radius: 20px;
-    padding: 1.8rem 2rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    animation: fadeInUp 0.6s ease-out;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.glass-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(96, 165, 250, 0.15);
-}
-
-.section-header {
-    font-family: 'Poppins', sans-serif;
+.masthead-title {
+    font-family: 'Source Serif 4', serif;
     font-weight: 600;
-    font-size: 1.25rem;
-    color: #e2e8f0;
-    margin-bottom: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    font-size: 2.1rem;
+    color: #1F2A24;
+    line-height: 1.15;
 }
 
-/* Sliders */
-div[data-testid="stSlider"] label p {
-    color: #cbd5e1 !important;
+.masthead-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.92rem;
+    color: #5A5348;
+    margin-top: 0.4rem;
+    max-width: 520px;
+}
+
+.field-group-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: #6B6459;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    border-bottom: 1px solid #C9C2B4;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.1rem;
+    margin-top: 0.3rem;
+}
+
+div[data-testid="stSlider"] label p,
+div[data-testid="stSelectbox"] label p {
+    color: #3A362E !important;
     font-weight: 500 !important;
-    font-size: 0.95rem !important;
+    font-size: 0.88rem !important;
 }
 
 div[data-testid="stSlider"] > div > div > div > div {
-    background: linear-gradient(90deg, #60a5fa, #a78bfa) !important;
+    background-color: #1F2A24 !important;
 }
 
-/* Selectbox */
-div[data-testid="stSelectbox"] label p {
-    color: #cbd5e1 !important;
-    font-weight: 500 !important;
-    font-size: 0.95rem !important;
+div[data-testid="stTickBar"] {
+    display: none;
 }
 
 div[data-testid="stSelectbox"] > div > div {
-    background-color: rgba(15, 23, 42, 0.7) !important;
-    border: 1px solid rgba(148, 163, 184, 0.25) !important;
-    border-radius: 10px !important;
-    color: #e2e8f0 !important;
+    background-color: #F7F5F0 !important;
+    border: 1px solid #C9C2B4 !important;
+    border-radius: 3px !important;
+    color: #1F2A24 !important;
 }
 
-/* Submit button */
 div[data-testid="stFormSubmitButton"] > button {
     width: 100%;
-    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-    color: white;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 1.05rem;
-    padding: 0.75rem 0;
-    border-radius: 14px;
+    background-color: #1F2A24;
+    color: #EDEAE3;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.7rem 0;
+    border-radius: 3px;
     border: none;
-    margin-top: 0.5rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.35);
+    margin-top: 0.8rem;
+    transition: background-color 0.15s ease;
 }
 
 div[data-testid="stFormSubmitButton"] > button:hover {
-    transform: translateY(-2px) scale(1.01);
-    box-shadow: 0 6px 28px rgba(139, 92, 246, 0.55);
+    background-color: #34433A;
+    color: #EDEAE3;
     border: none;
-    color: white;
 }
 
-div[data-testid="stFormSubmitButton"] > button:active {
-    transform: translateY(0) scale(0.99);
-}
-
-/* Result card */
-.result-card {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
-    border: 1px solid rgba(139, 92, 246, 0.4);
-    border-radius: 22px;
-    padding: 2.2rem;
-    text-align: center;
-    margin-top: 1.5rem;
-    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 10px 40px rgba(139, 92, 246, 0.25);
-}
-
-@keyframes popIn {
-    0% { opacity: 0; transform: scale(0.85); }
-    100% { opacity: 1; transform: scale(1); }
+.result-block {
+    margin-top: 2.2rem;
+    padding-top: 1.6rem;
+    border-top: 2px solid #1F2A24;
 }
 
 .result-label {
-    color: #94a3b8;
-    font-size: 1rem;
-    font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: #6B6459;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.5rem;
 }
 
 .result-price {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 800;
-    font-size: 3rem;
-    background: linear-gradient(90deg, #4ade80, #22d3ee);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin: 0;
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 3.2rem;
+    color: #1F2A24;
+    line-height: 1;
 }
 
-.result-note {
-    color: #64748b;
-    font-size: 0.85rem;
-    margin-top: 0.6rem;
+.result-table {
+    margin-top: 1.4rem;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
 }
 
-/* Divider styling */
-hr {
-    border-color: rgba(148, 163, 184, 0.15) !important;
+.result-table td {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #DAD5C9;
+    color: #3A362E;
 }
 
-/* Metric-like summary chips shown after prediction */
-.chip-row {
-    display: flex;
-    gap: 0.7rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 1.2rem;
+.result-table td:first-child {
+    color: #6B6459;
+    width: 45%;
 }
 
-.chip {
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    border-radius: 999px;
-    padding: 0.4rem 1rem;
-    font-size: 0.85rem;
-    color: #cbd5e1;
+.result-table td:last-child {
+    text-align: right;
+    font-weight: 500;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -237,15 +177,16 @@ def load_artifacts():
 try:
     model, encoders, scaler_fitur, target_scaler, rentang = load_artifacts()
 except Exception as e:
-    st.error(f"⚠️ Error loading model artifacts: {e}")
+    st.error(f"Error loading model artifacts: {e}")
     st.stop()
 
-# --- Hero Header ---
+# --- Masthead ---
 st.markdown("""
-<div class="hero-container">
-    <div class="hero-title">🏠 Smart House Price Predictor</div>
-    <div class="hero-subtitle">
-        Powered by machine learning — enter your property details below and get an instant, data-driven market estimate.
+<div class="masthead">
+    <div class="masthead-label">VALUATION TOOL</div>
+    <div class="masthead-title">House Price Estimator</div>
+    <div class="masthead-sub">
+        Provide the property specifications below to generate a market value estimate from the trained pricing model.
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -255,8 +196,7 @@ with st.form("prediction_form"):
     col1, col2 = st.columns(2, gap="large")
 
     with col1:
-        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">🛏️ Physical Features</div>', unsafe_allow_html=True)
+        st.markdown('<div class="field-group-label">Physical Features</div>', unsafe_allow_html=True)
 
         bedrooms = st.slider("Bedrooms",
                              min_value=float(rentang['bedrooms']['min']),
@@ -272,27 +212,24 @@ with st.form("prediction_form"):
                            min_value=float(rentang['floors']['min']),
                            max_value=float(rentang['floors']['max']),
                            value=float(rentang['floors']['min']))
-        st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
-        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">📐 Space & Location</div>', unsafe_allow_html=True)
+        st.markdown('<div class="field-group-label">Space &amp; Location</div>', unsafe_allow_html=True)
 
-        sqft_living = st.slider("Living Area (Sqft)",
+        sqft_living = st.slider("Living area (sqft)",
                                 min_value=float(rentang['sqft_living']['min']),
                                 max_value=float(rentang['sqft_living']['max']),
                                 value=float(rentang['sqft_living']['min']))
 
-        sqft_above = st.slider("Above Ground Area (Sqft)",
+        sqft_above = st.slider("Above-ground area (sqft)",
                                min_value=float(rentang['sqft_above']['min']),
                                max_value=float(rentang['sqft_above']['max']),
                                value=float(rentang['sqft_above']['min']))
 
         city = st.selectbox("City", options=list(encoders['city'].classes_))
-        statezip = st.selectbox("State Zip Code", options=list(encoders['statezip'].classes_))
-        st.markdown('</div>', unsafe_allow_html=True)
+        statezip = st.selectbox("State ZIP code", options=list(encoders['statezip'].classes_))
 
-    submit_button = st.form_submit_button("✨ Predict House Price")
+    submit_button = st.form_submit_button("Estimate price")
 
 if submit_button:
     # 1. Pre-processing: Categorical Encoding
@@ -320,18 +257,18 @@ if submit_button:
     price_final = target_scaler.inverse_transform(pred_scaled.reshape(-1, 1))[0][0]
 
     # --- Result Display ---
-    st.balloons()
     st.markdown(f"""
-    <div class="result-card">
-        <div class="result-label">Estimated Market Price</div>
-        <div class="result-price">${price_final:,.2f}</div>
-        <div class="result-note">Based on the property details you provided</div>
-        <div class="chip-row">
-            <div class="chip">🛏️ {bedrooms:g} bed</div>
-            <div class="chip">🛁 {bathrooms:g} bath</div>
-            <div class="chip">🏢 {floors:g} floor(s)</div>
-            <div class="chip">📐 {sqft_living:,.0f} sqft living</div>
-            <div class="chip">📍 {city}</div>
-        </div>
+    <div class="result-block">
+        <div class="result-label">Estimated market price</div>
+        <div class="result-price">${price_final:,.0f}</div>
+        <table class="result-table">
+            <tr><td>Bedrooms</td><td>{bedrooms:g}</td></tr>
+            <tr><td>Bathrooms</td><td>{bathrooms:g}</td></tr>
+            <tr><td>Floors</td><td>{floors:g}</td></tr>
+            <tr><td>Living area</td><td>{sqft_living:,.0f} sqft</td></tr>
+            <tr><td>Above-ground area</td><td>{sqft_above:,.0f} sqft</td></tr>
+            <tr><td>City</td><td>{city}</td></tr>
+            <tr><td>State ZIP</td><td>{statezip}</td></tr>
+        </table>
     </div>
     """, unsafe_allow_html=True)
