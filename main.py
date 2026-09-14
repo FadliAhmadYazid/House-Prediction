@@ -84,8 +84,29 @@ div[data-testid="stSlider"] > div > div > div > div {
     background-color: #1F2A24 !important;
 }
 
-/* Restyle the built-in value tooltip: no dark box, plain text, always visible */
-div[data-baseweb="slider"] div[role="slider"] div {
+/* The round drag handle: solid accent color */
+div[data-baseweb="slider"] div[role="slider"] {
+    background-color: #C1443A !important;
+    border: none !important;
+}
+
+/* Everything inside the handle (the value tooltip) should have no dark box, plain dark text */
+div[data-baseweb="slider"] div[role="slider"] * {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    color: #1F2A24 !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 0.78rem !important;
+    box-shadow: none !important;
+    border: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+div[data-testid="stThumbValue"],
+div[data-testid="stSliderThumbValue"] {
+    background: transparent !important;
     background-color: transparent !important;
     color: #1F2A24 !important;
     font-family: 'IBM Plex Mono', monospace !important;
