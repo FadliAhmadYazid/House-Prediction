@@ -96,19 +96,6 @@ div[data-testid="stTickBar"] {
     display: none;
 }
 
-/* Make the current-value bubble on sliders always visible, not just on hover/drag */
-div[data-testid="stSlider"] div[role="slider"] > div {
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: translateY(0) !important;
-}
-
-div[data-testid="stSlider"] div[data-baseweb="tooltip"] {
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: block !important;
-}
-
 div[data-testid="stSelectbox"] > div > div {
     background-color: #F7F5F0 !important;
     border: 1px solid #C9C2B4 !important;
@@ -116,14 +103,20 @@ div[data-testid="stSelectbox"] > div > div {
     color: #1F2A24 !important;
 }
 
+div[data-testid="stFormSubmitButton"] {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+}
+
 div[data-testid="stFormSubmitButton"] > button {
-    width: 100%;
+    width: auto;
     background-color: #1F2A24;
     color: #EDEAE3;
     font-family: 'Inter', sans-serif;
     font-weight: 500;
-    font-size: 0.95rem;
-    padding: 0.7rem 0;
+    font-size: 0.9rem;
+    padding: 0.55rem 1.6rem;
     border-radius: 3px;
     border: none;
     margin-top: 0.8rem;
