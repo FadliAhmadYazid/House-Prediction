@@ -101,11 +101,13 @@ div[data-baseweb="slider"] div[role="slider"] div,
 div[data-testid="stThumbValue"],
 div[data-testid="stSliderThumbValue"] {
     background-color: #22282B !important;
-    color: #EDEEEC !important;
+    color: #14181A !important;
     font-family: 'IBM Plex Mono', monospace !important;
+    font-weight: 600 !important;
     font-size: 0.78rem !important;
     border: 1px solid #3A4144 !important;
     border-radius: 4px !important;
+    padding: 0.3rem 0.6rem !important;
     opacity: 1 !important;
     visibility: visible !important;
 }
