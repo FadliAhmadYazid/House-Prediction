@@ -96,11 +96,11 @@ div[data-baseweb="slider"] div[role="slider"] {
     border: none !important;
 }
 
-/* Value tooltip shown above the handle: dark theme box, readable text */
+/* Value tooltip shown above the handle: light box so black text is readable */
 div[data-baseweb="slider"] div[role="slider"] div,
 div[data-testid="stThumbValue"],
 div[data-testid="stSliderThumbValue"] {
-    background-color: #22282B !important;
+    background-color: #EDEEEC !important;
     color: #14181A !important;
     font-family: 'IBM Plex Mono', monospace !important;
     font-weight: 600 !important;
@@ -114,6 +114,14 @@ div[data-testid="stSliderThumbValue"] {
 
 div[data-testid="stTickBar"] {
     display: none;
+}
+
+div[data-testid="stTickBarMin"],
+div[data-testid="stTickBarMax"] {
+    background-color: transparent !important;
+    color: #D6D9D8 !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-weight: 600 !important;
 }
 
 div[data-testid="stSelectbox"] > div > div {
