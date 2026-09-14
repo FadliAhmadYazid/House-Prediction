@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import pandas as pd
 import numpy as np
 import pickle
@@ -98,14 +97,8 @@ div[data-baseweb="slider"] div[role="slider"] {
 }
 
 /* Value tooltip shown above the handle: light box so black text is readable */
-div[data-baseweb="slider"] div[role="slider"] div,
-div[data-testid="stThumbValue"],
 div[data-testid="stSliderThumbValue"] {
     background-color: #EDEEEC !important;
-    color: #14181A !important;
-    font-family: 'IBM Plex Mono', monospace !important;
-    font-weight: 600 !important;
-    font-size: 0.78rem !important;
     border: 1px solid #3A4144 !important;
     border-radius: 4px !important;
     padding: 0.3rem 0.6rem !important;
@@ -113,21 +106,22 @@ div[data-testid="stSliderThumbValue"] {
     visibility: visible !important;
 }
 
+div[data-testid="stSliderThumbValue"] p {
+    color: #14181A !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-weight: 600 !important;
+    font-size: 0.78rem !important;
+    margin: 0 !important;
+}
+
 div[data-testid="stTickBar"] {
     display: none;
 }
 
-div[data-testid="stTickBarMin"],
-div[data-testid="stTickBarMax"] {
+/* Min/max labels at the ends of the slider track */
+div[data-testid="stSliderTickBar"] p {
     color: #14181A !important;
     font-family: 'IBM Plex Mono', monospace !important;
-    font-weight: 600 !important;
-}
-
-/* Fallback: target the min/max label container by structure in case testid differs by version */
-div[data-baseweb="slider"] > div:last-child span,
-div[data-baseweb="slider"] > div:last-child div {
-    color: #14181A !important;
     font-weight: 600 !important;
 }
 
